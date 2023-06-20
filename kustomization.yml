@@ -1,17 +1,16 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+apiVersion: v1
+kind: Pod
 metadata:
-  name: my-go-app
-  namespace: argocd
+  name: argo-test
+  labels:
+    name: argo-test
 spec:
-  destination:
-    namespace: default
-    server: https://kubernetes.default.svc
-  source:
-    repoURL: https://github.com/SiJun-Yoo/argo-eks-ci-cd
-    targetRevision: HEAD
-    path: /path/to/your/go-app
-    helm:
-      valueFiles:
-        - values.yaml
-  project: default
+  containers:
+  - name: argo-test
+    image: nginx
+    resources:
+      limits:
+        memory: "64Mi"
+        cpu: "0.2"
+    ports:
+      - containerPort: 80
