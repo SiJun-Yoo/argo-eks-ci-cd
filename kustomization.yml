@@ -1,19 +1,17 @@
-apiVersion: apps/v1
-kind: ReplicaSet
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: nginx
+  name: my-go-app
+  namespace: argocd
 spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: webfront
-    template:
-      metadata:
-        labels:
-          app: webfront
-      spec:
-        containers:
-        - image: nginx
-          name: webfront-container
-          ports:
-            - containerPort: 80
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/SiJun-Yoo/argo-eks-ci-cd
+    targetRevision: HEAD
+    path: /path/to/your/go-app
+    helm:
+      valueFiles:
+        - values.yaml
+  project: default
